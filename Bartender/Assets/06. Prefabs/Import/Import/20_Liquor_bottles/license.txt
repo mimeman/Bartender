@@ -1,0 +1,11 @@
+Model Information:
+* title:	20 Liquor bottles
+* source:	https://sketchfab.com/3d-models/20-liquor-bottles-4729b1cfa5b74db68924190242f8ac76
+* author:	Yannick Deharo (https://sketchfab.com/YannickDeharo)
+
+Model License:
+* license type:	CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
+* requirements:	Author must be credited. Modified versions must have the same license. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "20 Liquor bottles" (https://sketchfab.com/3d-models/20-liquor-bottles-4729b1cfa5b74db68924190242f8ac76) by Yannick Deharo (https://sketchfab.com/YannickDeharo) licensed under CC-BY-SA-4.0 (http://creativecommons.org/licenses/by-sa/4.0/)
