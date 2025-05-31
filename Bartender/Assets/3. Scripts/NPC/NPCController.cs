@@ -20,8 +20,14 @@ public class NPCController : MonoBehaviour
     private void Awake()
     {
         stateMachine = new NPCStateMachine();
+        stateMachine.Intialize(this);
     }
 
+
+    private void Start()
+    {
+        stateMachine.ChangeState(new MoveToSeatState(this));
+    }
 
     private void Update()
     {

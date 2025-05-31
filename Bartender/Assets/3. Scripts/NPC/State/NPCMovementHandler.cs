@@ -6,13 +6,6 @@ public class NPCMovementHandler : MonoBehaviour
     // NPC가 사용할 NavMeshAgent 컴포넌트
     private NavMeshAgent agent;
 
-    [Header("Raycast Settings")]
-    [Tooltip("앞에 NPC가 있는지 확인할 Raycast 거리")]
-    public float queueCheckDistance = 2f;
-
-    [Tooltip("줄 서기 감지를 위한 NPC 레이어")]
-    public LayerMask npcLayer;
-
     [Header("Seating")]
     [Tooltip("NPC가 앉을 수 있는 좌석 Transform 배열")]
     public Transform[] seatPositions;
@@ -44,14 +37,6 @@ public class NPCMovementHandler : MonoBehaviour
                (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
     }
 
-    // 줄 서기: 앞에 NPC가 있는지 Raycast로 확인
-    public bool IsFrontBlocked()
-    {
-        Vector3 origin = transform.position + Vector3.up * 1f;   // 살짝 위에서 쏘기
-        Vector3 direction = transform.forward;
-
-        return Physics.Raycast(origin, direction, queueCheckDistance, npcLayer);
-    }
 
     // 빈 의자 탐색 (비어있는 첫 번째 의자 반환)
     public Transform FindEmptySeat()

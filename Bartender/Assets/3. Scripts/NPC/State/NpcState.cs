@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class NpcState : MonoBehaviour
 {
-    protected NPCController controller;
+    protected NPCController npc;
 
-    public NpcState(NPCController controller)   //초기화
+    public NpcState(NPCController npc)   //초기화
     {
-        this.controller = controller;
+        this.npc = npc;
     }
 
     public virtual void Enter() { }
