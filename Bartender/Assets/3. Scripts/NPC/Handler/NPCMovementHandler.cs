@@ -27,10 +27,25 @@ public class NPCMovementHandler : MonoBehaviour
     }
 
     // 목적지로 이동 명령
+    /*    public void MoveTo(Vector3 destination)
+        {
+            if (agent == null) return;
+            agent.SetDestination(destination);
+        }*/
+
     public void MoveTo(Vector3 destination)
     {
         if (agent == null) return;
-        agent.SetDestination(destination);
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(destination, out hit, 1.0f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position); // 안전한 NavMesh 위치로 이동
+        }
+        else
+        {
+            Debug.LogWarning("NavMesh 위의 유효한 지점을 찾지 못했습니다.");
+        }
     }
 
     // 목적지 도착 여부 확인
@@ -39,7 +54,8 @@ public class NPCMovementHandler : MonoBehaviour
         if (agent == null) return false;
         return !agent.pathPending &&
                agent.remainingDistance <= agent.stoppingDistance &&
-               (!agent.hasPath || agent.velocity.sqrMagnitude == 0f);
+               (!agent.hasPath || agent.velocity.sqrMagnitude < 0.2f);
+        
     }
 
     // 빈 의자 할당 (NPCSeatManager를 통해서만)

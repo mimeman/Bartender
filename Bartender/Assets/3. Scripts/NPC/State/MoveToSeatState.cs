@@ -34,9 +34,10 @@ public class MoveToSeatState : NpcState
     public override void Update()
     {
         // 4. ÁÂ¼®¿¡ µµÂøÇß´ÂÁö È®ÀÎ
-        if (npc.npcData.isArrived && npc.movementHandler.HasReachedDestination())
+        if (npc.movementHandler.HasReachedDestination())
         {
-            npc.npcData.isArrived = false;
+            Debug.Log("µµÂø");
+            npc.npcData.isArrived = true;
 
             // 5. ÁÂ¼® µµÂø ¡æ »óÅÂ °»½Å
             npc.npcData.isSeated = true;

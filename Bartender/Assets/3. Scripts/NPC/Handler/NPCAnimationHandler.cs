@@ -41,4 +41,5 @@ public class NPCAnimationHandler : MonoBehaviour
         return stateInfo.IsName(animationStateName) && stateInfo.normalizedTime >= 1.0f;
     }
 
+
 }

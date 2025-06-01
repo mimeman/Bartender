@@ -16,9 +16,10 @@ public class SitAndWaitState : NpcState
         npc.animationHandler.SetTrigger("StandToSit"); //Trigger 파라미터 이름
 
         // 2. 애니메이션 끝나는 유무 확인 후
-        if (npc.animationHandler.CheckFinishAnimation("isSit"))
+        if (npc.animationHandler.CheckFinishAnimation("StandToSit"))
         {
-            npc.ChangeState(new OrderState(npc));
+            Debug.Log("isSit 끝");
+            npc.ChangeState(new StandToSit(npc));
         }
     }
 }
