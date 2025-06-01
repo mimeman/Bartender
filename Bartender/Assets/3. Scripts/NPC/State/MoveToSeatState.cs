@@ -1,55 +1,52 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
-
-
-//npc가 좌석으로 move state
 public class MoveToSeatState : NpcState
 {
-    private bool seatAssigned = false;  //좌석 지정 유무
 
     public MoveToSeatState(NPCController npc) : base(npc) { }
 
     public override void Enter()
     {
-        // 좌석이 이미 지정되어있는지 확인
-        if (npc.npcData.seateTransform)
+        if (npc.npcData.isSeated)
         {
-            NPCSeatManager seatManager = GameObject.FindObjectOfType<NPCSeatManager>();
-            if (seatManager != null)
-            {
-                Transform seat = seatManager.AssignSeat(); //의자 할당
-                if (seat != null)
-                {
-                    npc.npcData.seateTransform = seat;
-                    npc.movementHandler.MoveTo(seat.position); //목적지로 이동
-                    seatAssigned = true;
-                }
-                else Debug.LogWarning("의자 없다 더 이상 돌아가");
-
-            }
+            Debug.LogWarning("이미 착석한 NPC입니다.");
+            return;
         }
 
-        //이미 할당된 좌석이 있으면 이동
+        // 1. SeatManager에서 좌석 요청
+        Transform assignedSeat = npc.seatManager.AssignSeat();
+
+        if (assignedSeat != null) // 2. 좌석 위치로 이동
+        {
+            npc.animationHandler.SetAnimation("Walk", true);
+            Debug.Log($"wal");
+            npc.movementHandler.MoveTo(assignedSeat.position);
+            npc.npcData.isMove = true;
+        }
         else
         {
-            npc.movementHandler.MoveTo(npc.npcData.seateTransform.position);
-            seatAssigned = true;
+            Debug.LogWarning("사용 가능한 좌석이 없습니다.");
+            // 이후 재시도 로직이나 다른 대기 상태로 전환 가능
         }
     }
 
-    public override void Update() //좌석에 도착했는지 확인 -> 다음 상태로 전환
+    public override void Update()
     {
-        if (seatAssigned && npc.movementHandler.HasReachedDestination()) //도착 유무 확인
+        // 4. 좌석에 도착했는지 확인
+        if (npc.npcData.isArrived && npc.movementHandler.HasReachedDestination())
         {
-           // npc.ChangeState(new SitAndWaitState(npc)); // 다음 상태로 전환
-        }
+            npc.npcData.isArrived = false;
 
+            // 5. 좌석 도착 → 상태 갱신
+            npc.npcData.isSeated = true;
+            npc.animationHandler.SetAnimation("Walk", false);
+            npc.ChangeState(new SitAndWaitState(npc));
+        }
     }
 
     public override void Exit()
     {
-        //walk 애니메이션 종료
+        // 필요 시 Exit 처리
     }
 }

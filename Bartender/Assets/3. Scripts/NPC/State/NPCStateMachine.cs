@@ -9,8 +9,6 @@ public class NPCStateMachine
     {
         npc = controller;
     }
-
-
     public void ChangeState(NpcState newState)
     {
         CurrentState?.Exit();
