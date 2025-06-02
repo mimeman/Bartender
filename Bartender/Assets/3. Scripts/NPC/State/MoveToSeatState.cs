@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MoveToSeatState : NpcState
 {
-
     public MoveToSeatState(NPCController npc) : base(npc) { }
 
     public override void Enter()
@@ -19,8 +18,9 @@ public class MoveToSeatState : NpcState
 
         if (assignedSeat != null) // 2. 좌석 위치로 이동
         {
+            Debug.Log($"좌석으로 이동 시작");
+
             npc.animationHandler.SetAnimation("Walk", true);
-            Debug.Log($"wal");
             npc.movementHandler.MoveTo(assignedSeat.position);
             npc.npcData.isMove = true;
         }
@@ -36,13 +36,13 @@ public class MoveToSeatState : NpcState
         // 4. 좌석에 도착했는지 확인
         if (npc.movementHandler.HasReachedDestination())
         {
-            Debug.Log("도착");
+            Debug.Log("의자 도착");
             npc.npcData.isArrived = true;
 
             // 5. 좌석 도착 → 상태 갱신
             npc.npcData.isSeated = true;
             npc.animationHandler.SetAnimation("Walk", false);
-            npc.ChangeState(new SitAndWaitState(npc));
+            npc.ChangeState(new StandToSit(npc));
         }
     }
 

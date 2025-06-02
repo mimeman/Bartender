@@ -18,6 +18,12 @@ public class NPCController : MonoBehaviour
     public NPCSeatManager seatManager;
     public NPCData npcData;
 
+    [Header("DrinkDB")]
+    public DrinkDB drinkDB;
+
+
+
+
     private void Awake()
     {
         stateMachine = new NPCStateMachine();

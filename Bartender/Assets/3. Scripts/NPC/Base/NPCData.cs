@@ -11,6 +11,13 @@ public class NPCData : MonoBehaviour
     public bool isFinished = false;     // 모든 행동 완료 여부
 
 
+    [Header("출입 관련")]
+    public Transform spawnPoint;        //스폰 포인트
+
+
+    [Header("음료 받는 위치")]
+    public Transform drinkCheckPoint; // Trigger용 포지션 정보
+
     [Header("음료 평가")]
     [Range(0f, 10f)]
     public float drinkScore = 0f;       // 음료 점수
@@ -21,6 +28,10 @@ public class NPCData : MonoBehaviour
 
     [Tooltip("음료를 마시는 총 시간")]
     public float drinkDuration = 180f;  // 마시는 시간 (3분)
+
+
+
+
 
     // NPC 초기화 (재사용 시)
     public void ResetNPCData()

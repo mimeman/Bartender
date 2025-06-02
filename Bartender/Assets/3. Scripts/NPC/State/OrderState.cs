@@ -14,10 +14,15 @@ public class OrderState : NpcState
         // 2. 주문 상태 갱신
         npc.npcData.hasOrdered = true;
 
-        // 3. 주문 UI 표시 (머리 위에 아이콘 등)
-        npc.uiHandler.ShowOrderIcon();
+        // 3. 랜덤 음료 뽑기
+        var drink = npc.drinkDB.GetRandomDrink();
+        //npc.npcData. = drink;
 
-        // 4. 딜레이 후 다음 상태로 전환
+        // 5. UI에 주문 이미지 전달
+        npc.uiHandler.ShowOrderIcon(drink.iconSprite);
+
+
+        // 6. 딜레이 후 다음 상태로 전환
         npc.StartCoroutine(WaitForOrderToComplete());
     }
 
@@ -32,7 +37,7 @@ public class OrderState : NpcState
         npc.uiHandler.HideOrderIcon();
 
         // 6. 다음 상태로 전환
-        npc.ChangeState(new WaitForDrinkState(npc));
+        npc.ChangeState(new SitIdleState(npc));
     }
 
     public override void Exit()
