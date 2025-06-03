@@ -14,6 +14,8 @@ public class NPCData : MonoBehaviour
     [Header("출입 관련")]
     public Transform spawnPoint;        //스폰 포인트
 
+    [Header("내가 주문한 움류")]
+    public DrinkData orderedDrink;      // 주문한 음료 정보
 
     [Header("음료 받는 위치")]
     public Transform drinkCheckPoint; // Trigger용 포지션 정보
@@ -36,19 +38,16 @@ public class NPCData : MonoBehaviour
     // NPC 초기화 (재사용 시)
     public void ResetNPCData()
     {
+        orderDelay = Random.Range(5f, 7f);
+        drinkDuration = Random.Range(120f, 240f);
+
         isSeated = false;
         drinkScore = 0f;
-        orderDelay = 0f;
         hasOrdered = false;
         hasDrink = false;
         isFinished = false;
         isArrived = false;
-
-        // 랜덤 주문 딜레이 설정 (5~7초)
-        orderDelay = Random.Range(5f, 7f);
-
-        // 랜덤 음료 시간 설정 (2~4분)
-        drinkDuration = Random.Range(120f, 240f);
+        orderedDrink = null;
     }
 
     private void Start()

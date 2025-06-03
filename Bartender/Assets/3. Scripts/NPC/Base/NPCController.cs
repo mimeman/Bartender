@@ -21,9 +21,6 @@ public class NPCController : MonoBehaviour
     [Header("DrinkDB")]
     public DrinkDB drinkDB;
 
-
-
-
     private void Awake()
     {
         stateMachine = new NPCStateMachine();

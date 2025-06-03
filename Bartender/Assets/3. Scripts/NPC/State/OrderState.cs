@@ -16,7 +16,8 @@ public class OrderState : NpcState
 
         // 3. 랜덤 음료 뽑기
         var drink = npc.drinkDB.GetRandomDrink();
-        //npc.npcData. = drink;
+        npc.npcData.orderedDrink = drink;
+
 
         // 5. UI에 주문 이미지 전달
         npc.uiHandler.ShowOrderIcon(drink.iconSprite);
