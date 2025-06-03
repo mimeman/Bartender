@@ -5,6 +5,9 @@ public class MoveToSeatState : NpcState
 {
     public MoveToSeatState(NPCController npc) : base(npc) { }
 
+    private Transform moveTarget; // Anchor 위치
+    private Transform sitPoint;   // 도착 후 앉을 위치
+
     public override void Enter()
     {
         if (npc.npcData.isSeated)
@@ -14,40 +17,40 @@ public class MoveToSeatState : NpcState
         }
 
         // 1. SeatManager에서 좌석 요청
-        Transform assignedSeat = npc.seatManager.AssignSeat();
+        (Transform anchor, Transform sit) = npc.seatManager.AssignSeatPair();
 
-        if (assignedSeat != null) // 2. 좌석 위치로 이동
+        if (anchor != null && sit != null)
         {
-            Debug.Log($"좌석으로 이동 시작");
+            moveTarget = anchor;
+            sitPoint = sit;
 
-            npc.animationHandler.SetAnimation("Walk", true);
-            npc.movementHandler.MoveTo(assignedSeat.position);
+            // 2. 좌석으로 이동
+            npc.movementHandler.MoveTo(moveTarget.position);
+            npc.animationHandler.SetTrigger("isWalk");
             npc.npcData.isMove = true;
         }
         else
         {
             Debug.LogWarning("사용 가능한 좌석이 없습니다.");
-            // 이후 재시도 로직이나 다른 대기 상태로 전환 가능
         }
     }
 
     public override void Update()
     {
         // 4. 좌석에 도착했는지 확인
-        if (npc.movementHandler.HasReachedDestination())
+        if (npc.npcData.isMove && npc.movementHandler.HasReachedDestination())
         {
-            Debug.Log("의자 도착");
-            npc.npcData.isArrived = true;
 
-            // 5. 좌석 도착 → 상태 갱신
+            // 도착 → 좌석 위치로 텔레포트
+            npc.transform.position = sitPoint.position;
+            npc.transform.rotation = sitPoint.rotation;
+
+            npc.animationHandler.SetAnimation("isWalk", false);
+            npc.npcData.isArrived = true;
             npc.npcData.isSeated = true;
-            npc.animationHandler.SetAnimation("Walk", false);
+
+            // 다음 상태 전환
             npc.ChangeState(new StandToSit(npc));
         }
-    }
-
-    public override void Exit()
-    {
-        // 필요 시 Exit 처리
     }
 }

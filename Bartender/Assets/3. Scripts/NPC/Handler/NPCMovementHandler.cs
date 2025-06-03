@@ -26,12 +26,6 @@ public class NPCMovementHandler : MonoBehaviour
         }
     }
 
-    // 목적지로 이동 명령
-    /*    public void MoveTo(Vector3 destination)
-        {
-            if (agent == null) return;
-            agent.SetDestination(destination);
-        }*/
 
     public void MoveTo(Vector3 destination)
     {
@@ -58,11 +52,12 @@ public class NPCMovementHandler : MonoBehaviour
         
     }
 
-    // 빈 의자 할당 (NPCSeatManager를 통해서만)
-    public Transform AssignSeat()
+    // 의자 할당 (anchor, sitPoint 같이 반환)
+    public (Transform anchor, Transform sitPoint) AssignSeat()
     {
-        if (seatManager == null) return null;
-        return seatManager.AssignSeat();
+        if (seatManager == null) return (null, null);
+
+        return seatManager.AssignSeatPair();
     }
 
     // 의자 반납 (NPCSeatManager를 통해서만)
