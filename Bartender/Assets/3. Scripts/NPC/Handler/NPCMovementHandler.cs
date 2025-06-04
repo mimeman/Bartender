@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class NPCMovementHandler : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class NPCMovementHandler : MonoBehaviour
     private Collider targetAnchorCollider;  // 이동 대상 Anchor (콜라이더)
     private Transform currentTarget;        // 현재 목적지 (위치용)
     private Transform currentSitPoint;      // 앉을 위치 (SitPoint)
+
+    [Header("Rotation Target")]
+    [Tooltip("착석 시 NPC가 바라보는 옵젝")]
+    public Transform rotationTarget; // 인스펙터에서 지정
+
 
     private void Awake()
     {
@@ -72,6 +78,8 @@ public class NPCMovementHandler : MonoBehaviour
         {
             transform.position = currentSitPoint.position;
         }
+
+        RotateTowardsSitPoint();
     }
 
     // 현재 NavMesh 목적지에 도달했는지 판단합니다.
@@ -81,6 +89,21 @@ public class NPCMovementHandler : MonoBehaviour
         return !agent.pathPending &&
                agent.remainingDistance <= agent.stoppingDistance &&
                (!agent.hasPath || agent.velocity.sqrMagnitude < 0.2f);
+    }
+
+    // SitPoint를 기준으로 NPC의 Y축 회전만 정렬합니다.
+    private void RotateTowardsSitPoint()
+    {
+        if (rotationTarget == null) return;
+
+        Vector3 direction = rotationTarget.position - transform.position;
+        direction.y = 0f;
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = targetRotation;
+        }
     }
 
     // 사용 가능한 좌석을 할당받고 Anchor 콜라이더 및 SitPoint 반환합니다.

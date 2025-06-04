@@ -6,7 +6,7 @@ using UnityEngine;
 public class NPCController : MonoBehaviour
 {
     [Header("Core Systems")]
-    public NPCStateMachine stateMachine;    //상태 전환 로직
+    public NPCStateMachine stateMachine;                //상태 전환 로직
 
     [Header("Sub Handlers")]
     public NPCMovementHandler movementHandler;          //이동 관련(줄서기, 퇴장, 입장, 의자 찾기)
