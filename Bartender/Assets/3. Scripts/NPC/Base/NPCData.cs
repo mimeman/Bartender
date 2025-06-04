@@ -32,9 +32,6 @@ public class NPCData : MonoBehaviour
     public float drinkDuration = 180f;  // 마시는 시간 (3분)
 
 
-
-
-
     // NPC 초기화 (재사용 시)
     public void ResetNPCData()
     {

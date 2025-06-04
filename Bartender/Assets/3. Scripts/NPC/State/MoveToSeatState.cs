@@ -1,12 +1,11 @@
-using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class MoveToSeatState : NpcState
 {
     public MoveToSeatState(NPCController npc) : base(npc) { }
 
-    private Transform moveTarget; // Anchor 위치
-    private Transform sitPoint;   // 도착 후 앉을 위치
+    private Collider anchor;   // 도착 전 이동 지점
+    private Transform sitPoint; // 도착 후 앉는 위치
 
     public override void Enter()
     {
@@ -17,16 +16,13 @@ public class MoveToSeatState : NpcState
         }
 
         // 1. SeatManager에서 좌석 요청
-        (Transform anchor, Transform sit) = npc.seatManager.AssignSeatPair();
+        (anchor, sitPoint) = npc.movementHandler.AssignSeat();
 
-        if (anchor != null && sit != null)
+        if (anchor != null && sitPoint != null)
         {
-            moveTarget = anchor;
-            sitPoint = sit;
-
-            // 2. 좌석으로 이동
-            npc.movementHandler.MoveTo(moveTarget.position);
-            npc.animationHandler.SetTrigger("isWalk");
+            // 2. Anchor로 이동 시작
+            npc.movementHandler.MoveToSeat(anchor, sitPoint);
+            npc.animationHandler.SetTrigger("Walk");
             npc.npcData.isMove = true;
         }
         else
@@ -37,19 +33,19 @@ public class MoveToSeatState : NpcState
 
     public override void Update()
     {
-        // 4. 좌석에 도착했는지 확인
-        if (npc.npcData.isMove && npc.movementHandler.HasReachedDestination())
+        if (!npc.npcData.isMove) return;
+
+        // 3. Anchor 도착 확인
+        if (npc.movementHandler.HasReachedDestination())
         {
+            // 4. 착석 위치로 위치 이동
+            npc.movementHandler.UpdateMovementToSitPoint(sitPoint);
 
-            // 도착 → 좌석 위치로 텔레포트
-            npc.transform.position = sitPoint.position;
-            npc.transform.rotation = sitPoint.rotation;
-
-            npc.animationHandler.SetAnimation("isWalk", false);
+            npc.animationHandler.SetAnimation("Walk", false);
             npc.npcData.isArrived = true;
             npc.npcData.isSeated = true;
 
-            // 다음 상태 전환
+            // 5. 다음 상태로 전환
             npc.ChangeState(new StandToSit(npc));
         }
     }
