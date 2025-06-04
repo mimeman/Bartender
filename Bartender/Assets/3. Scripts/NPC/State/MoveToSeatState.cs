@@ -35,17 +35,14 @@ public class MoveToSeatState : NpcState
     {
         if (!npc.npcData.isMove) return;
 
-        // 3. Anchor 도착 확인
-        if (npc.movementHandler.HasReachedDestination())
+        if (npc.movementHandler.HasReachedDestination()) //좌석 도착 확인
         {
-            // 4. 착석 위치로 위치 이동
-            npc.movementHandler.UpdateMovementToSitPoint(sitPoint);
+            npc.movementHandler.TeleportToSitPoint(); // 의자 위치로 텔포
 
             npc.animationHandler.SetAnimation("Walk", false);
             npc.npcData.isArrived = true;
             npc.npcData.isSeated = true;
 
-            // 5. 다음 상태로 전환
             npc.ChangeState(new StandToSit(npc));
         }
     }
